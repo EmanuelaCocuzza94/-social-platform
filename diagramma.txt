@@ -1,0 +1,96 @@
+Table users {
+  id bigint [primary key, not null, increment]
+  username varchar [not null]
+  email varchar [unique, not null]
+  name varchar 
+  surname varchar
+  gender genders
+  born_at date
+  created_at timestamp
+  update_at timestamp
+}
+
+Enum genders {
+  male
+  female
+}
+
+Table posts {
+  id bigint [primary key, not null, increment]
+  user_id bigint [not null]
+  title varchar
+  body text 
+  status states
+  created_at timestamp
+  update_at timestamp
+}
+
+Enum states {
+  public
+  draft
+}
+
+Table media {
+  id bigint [primary key, not null, increment]
+  user_id bigint [not null]
+  path varchar
+  type types
+  created_at timestamp
+  update_at timestamp
+}
+
+Table media_post {
+  post_id bigint [not null]
+  media_id bigint [not null]
+  created_at timestamp
+  update_at timestamp
+}
+
+Enum types {
+  video
+  photo
+}
+
+Table tags {
+  id bigint [primary key, not null, increment]
+  name varchar [not null]
+  created_at timestamp
+  update_at timestamp
+}
+
+Table post_tag {
+  post_id bigint [not null]
+  tag_id bigint [not null]
+  created_at timestamp
+  update_at timestamp
+}
+
+Table comments {
+  id bigint [primary key, not null, increment]
+  user_id bigint [not null]
+  post_id bigint [not null]
+  body text [not null]
+  created_at timestamp
+  update_at timestamp
+}
+
+Table like {
+  user_id bigint [not null]
+  post_id bigint [not null]
+  created_at timestamp
+  update_at timestamp
+}
+
+
+
+Ref: posts.user_id > users.id // many-to-one
+Ref: media.user_id > users.id // many-to-one
+Ref: media_post.post_id <> posts.id // many-to-many
+Ref: media_post.media_id <> media.id // many-to-many
+Ref: post_tag.post_id <> posts.id // many-to-many
+Ref: post_tag.tag_id <> tags.id // many-to-many
+Ref: comments.user_id > users.id // many-to-one
+Ref: comments.post_id > posts.id // many-to-one
+Ref: like.user_id <> users.id // many-to-many
+Ref: like.post_id <> posts.id // many-to-many
+
